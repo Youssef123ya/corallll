@@ -201,10 +201,6 @@ python src/ml/evaluate_model.py --model_path models/coral_classifier.h5
 python src/ml/export_model.py --format tensorflowjs
 ```
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
 ### Development Workflow
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
