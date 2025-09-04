@@ -1,0 +1,8 @@
+INFO:     Started server process [5252]
+INFO:     Waiting for application startup.
+INFO:app:Starting Coral Reef Health Guardian...
+INFO:app:Using demo classifier (no trained model loaded)
+INFO:app:No trained model found, using demo classifier
+INFO:app:Application startup complete!
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)

@@ -1,0 +1,5 @@
+Class,Count,Percentage,Description
+Healthy,661,41.3,"Vibrant, colorful coral with good health"
+Unhealthy,508,31.8,"Bleached or stressed coral, whitish/pale"
+Dead,430,26.9,"Dead coral, darker/brownish, no living tissue"
+Total,1599,100.0,Complete dataset summary

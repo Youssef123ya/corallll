@@ -1,0 +1,7 @@
+2025-09-04 16:23:46,036 INFO Set uid to user 1000 succeeded
+2025-09-04 16:23:46,040 INFO RPC interface 'supervisor' initialized
+2025-09-04 16:23:46,040 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+2025-09-04 16:23:46,042 INFO daemonizing the supervisord process
+2025-09-04 16:23:46,043 INFO supervisord started with pid 5222
+2025-09-04 16:23:47,046 INFO spawned: 'coral-app' with pid 5252
+2025-09-04 16:23:48,048 INFO success: coral-app entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

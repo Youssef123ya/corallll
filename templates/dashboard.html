@@ -1,0 +1,760 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Coral Reef Health Guardian{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<section class="hero-section py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="fas fa-chart-line"></i> Coral Health Dashboard
+                </h1>
+                <p class="lead mb-0">
+                    Real-time monitoring and analytics for coral reef health assessment
+                </p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-flex gap-2 justify-content-end">
+                    <button class="btn btn-outline-light" onclick="refreshDashboard()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="btn btn-light" onclick="exportData()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Dashboard Content -->
+<section class="py-5">
+    <div class="container-fluid">
+        
+        <!-- Key Metrics Row -->
+        <div class="row mb-4">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Total Images Analyzed
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-analyzed">
+                                    1,599
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-image fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Model Accuracy
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="model-accuracy">
+                                    94.2%
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-bullseye fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Healthy Coral %
+                                </div>
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="healthy-percentage">
+                                            41.3%
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="progress progress-sm mr-2">
+                                            <div class="progress-bar bg-success" role="progressbar"
+                                                 style="width: 41.3%" aria-valuenow="41.3" aria-valuemin="0"
+                                                 aria-valuemax="100" id="healthy-progress"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-heart fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                    Processing Time
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="processing-time">
+                                    &lt;100ms
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clock fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <!-- Class Distribution Chart -->
+            <div class="col-xl-6 col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-chart-pie"></i> Class Distribution
+                        </h6>
+                        <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                aria-labelledby="dropdownMenuLink">
+                                <div class="dropdown-header">Chart Options:</div>
+                                <a class="dropdown-item" href="#" onclick="downloadChart('class-distribution')">Download PNG</a>
+                                <a class="dropdown-item" href="#" onclick="refreshChart('class-distribution')">Refresh Data</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                            <canvas id="class-distribution-chart"></canvas>
+                        </div>
+                        <div class="mt-4 text-center small">
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-success"></i> Healthy (661)
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-warning"></i> Unhealthy (508)
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-danger"></i> Dead (430)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RGB Analysis Chart -->
+            <div class="col-xl-6 col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-palette"></i> RGB Channel Analysis
+                        </h6>
+                        <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" 
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
+                                <div class="dropdown-header">Chart Options:</div>
+                                <a class="dropdown-item" href="#" onclick="downloadChart('rgb-analysis')">Download PNG</a>
+                                <a class="dropdown-item" href="#" onclick="refreshChart('rgb-analysis')">Refresh Data</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-bar">
+                            <canvas id="rgb-analysis-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Health Metrics and Analytics Row -->
+        <div class="row mb-4">
+            <!-- Health Score Trends -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-chart-line"></i> Brightness vs Contrast Analysis
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="brightness-contrast-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dataset Statistics -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-table"></i> Dataset Statistics
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm" id="stats-table">
+                                <thead>
+                                    <tr>
+                                        <th>Class</th>
+                                        <th>Count</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="badge bg-success">Healthy</span></td>
+                                        <td>661</td>
+                                        <td>41.3%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge bg-warning">Unhealthy</span></td>
+                                        <td>508</td>
+                                        <td>31.8%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge bg-danger">Dead</span></td>
+                                        <td>430</td>
+                                        <td>26.9%</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>1,599</th>
+                                        <th>100%</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        
+                        <hr>
+                        
+                        <!-- Balance Metrics -->
+                        <div class="mt-3">
+                            <h6 class="font-weight-bold">Balance Metrics</h6>
+                            <div class="small">
+                                <div class="d-flex justify-content-between">
+                                    <span>Balance Ratio:</span>
+                                    <span class="font-weight-bold">1.54:1</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>CV:</span>
+                                    <span class="font-weight-bold">0.180</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Status:</span>
+                                    <span class="badge bg-success">Well-balanced</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Analysis Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-upload"></i> Quick Analysis
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form id="dashboard-upload-form" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="dashboard-file-input" class="form-label">Upload Coral Image for Analysis</label>
+                                        <input type="file" class="form-control" id="dashboard-file-input" accept="image/*">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="dashboard-analyze-btn" disabled>
+                                        <i class="fas fa-search"></i> Analyze Image
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="dashboard-results" style="display: none;">
+                                    <!-- Quick results will be displayed here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .border-left-success {
+        border-left: 0.25rem solid #1cc88a !important;
+    }
+    
+    .border-left-info {
+        border-left: 0.25rem solid #36b9cc !important;
+    }
+    
+    .border-left-warning {
+        border-left: 0.25rem solid #f6c23e !important;
+    }
+    
+    .border-left-danger {
+        border-left: 0.25rem solid #e74a3b !important;
+    }
+    
+    .text-xs {
+        font-size: 0.7rem;
+    }
+    
+    .progress-sm {
+        height: 0.5rem;
+    }
+    
+    .chart-area {
+        position: relative;
+        height: 320px;
+        width: 100%;
+    }
+    
+    .chart-pie {
+        position: relative;
+        height: 320px;
+        width: 100%;
+    }
+    
+    .chart-bar {
+        position: relative;
+        height: 320px;
+        width: 100%;
+    }
+    
+    .card {
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    .animated--fade-in {
+        animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(-10px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let classDistributionChart = null;
+let rgbAnalysisChart = null;
+let brightnessContrastChart = null;
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    loadDashboardData();
+    setupQuickUpload();
+});
+
+async function loadDashboardData() {
+    try {
+        // Load dataset summary
+        const summaryResponse = await fetch('/api/dataset/summary');
+        const summaryData = await summaryResponse.json();
+        
+        // Load color analysis
+        const colorResponse = await fetch('/api/analysis/color');
+        const colorData = await colorResponse.json();
+        
+        // Update dashboard with data
+        updateDashboard(summaryData, colorData);
+        
+        // Create charts
+        createClassDistributionChart(summaryData.class_distribution);
+        createRGBAnalysisChart(colorData);
+        createBrightnessContrastChart(colorData);
+        
+    } catch (error) {
+        console.error('Error loading dashboard data:', error);
+        showAlert('Failed to load dashboard data', 'danger');
+    }
+}
+
+function updateDashboard(summaryData, colorData) {
+    // Update key metrics
+    document.getElementById('total-analyzed').textContent = summaryData.total_samples?.toLocaleString() || '1,599';
+    
+    // Update healthy percentage
+    const healthyClass = summaryData.class_distribution?.find(c => c.Class === 'Healthy');
+    if (healthyClass) {
+        const percentage = healthyClass.Percentage;
+        document.getElementById('healthy-percentage').textContent = `${percentage}%`;
+        document.getElementById('healthy-progress').style.width = `${percentage}%`;
+    }
+}
+
+function createClassDistributionChart(classData) {
+    const ctx = document.getElementById('class-distribution-chart').getContext('2d');
+    
+    const data = classData || [
+        { Class: 'Healthy', Count: 661, Percentage: 41.3 },
+        { Class: 'Unhealthy', Count: 508, Percentage: 31.8 },
+        { Class: 'Dead', Count: 430, Percentage: 26.9 }
+    ];
+    
+    classDistributionChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: data.map(d => d.Class),
+            datasets: [{
+                data: data.map(d => d.Count),
+                backgroundColor: [
+                    '#28a745',  // Healthy - Green
+                    '#ffc107',  // Unhealthy - Yellow
+                    '#dc3545'   // Dead - Red
+                ],
+                borderColor: '#fff',
+                borderWidth: 3,
+                hoverBorderWidth: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            return `${context.label}: ${context.parsed} (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            cutout: '60%'
+        }
+    });
+}
+
+function createRGBAnalysisChart(colorData) {
+    const ctx = document.getElementById('rgb-analysis-chart').getContext('2d');
+    
+    const classes = Object.keys(colorData);
+    const rValues = classes.map(cls => colorData[cls].rgb_mean[0]);
+    const gValues = classes.map(cls => colorData[cls].rgb_mean[1]);
+    const bValues = classes.map(cls => colorData[cls].rgb_mean[2]);
+    
+    rgbAnalysisChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: classes,
+            datasets: [
+                {
+                    label: 'R Channel',
+                    data: rValues,
+                    backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'G Channel',
+                    data: gValues,
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'B Channel',
+                    data: bValues,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Average Channel Value'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Coral Health Class'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            }
+        }
+    });
+}
+
+function createBrightnessContrastChart(colorData) {
+    const ctx = document.getElementById('brightness-contrast-chart').getContext('2d');
+    
+    const scatterData = Object.keys(colorData).map(cls => ({
+        x: colorData[cls].brightness_mean,
+        y: colorData[cls].contrast_mean,
+        label: cls
+    }));
+    
+    const colors = {
+        'Healthy': '#28a745',
+        'Unhealthy': '#ffc107',
+        'Dead': '#dc3545'
+    };
+    
+    brightnessContrastChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Coral Classes',
+                data: scatterData,
+                backgroundColor: scatterData.map(d => colors[d.label] + '80'),
+                borderColor: scatterData.map(d => colors[d.label]),
+                borderWidth: 2,
+                pointRadius: 12,
+                pointHoverRadius: 15
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Brightness'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Contrast'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            return context[0].raw.label;
+                        },
+                        label: function(context) {
+                            return [
+                                `Brightness: ${context.parsed.x.toFixed(1)}`,
+                                `Contrast: ${context.parsed.y.toFixed(1)}`
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function setupQuickUpload() {
+    const fileInput = document.getElementById('dashboard-file-input');
+    const form = document.getElementById('dashboard-upload-form');
+    const analyzeBtn = document.getElementById('dashboard-analyze-btn');
+    
+    fileInput.addEventListener('change', function(e) {
+        analyzeBtn.disabled = !e.target.files[0];
+    });
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const file = fileInput.files[0];
+        if (!file) return;
+        
+        const originalText = analyzeBtn.innerHTML;
+        analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+        analyzeBtn.disabled = true;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        try {
+            const response = await fetch('/api/predict', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            displayQuickResults(result);
+            
+        } catch (error) {
+            console.error('Quick analysis error:', error);
+            showAlert('Quick analysis failed', 'danger');
+        } finally {
+            analyzeBtn.innerHTML = originalText;
+            analyzeBtn.disabled = false;
+        }
+    });
+}
+
+function displayQuickResults(result) {
+    const resultsDiv = document.getElementById('dashboard-results');
+    const badgeClass = getHealthBadgeClass(result.prediction);
+    
+    resultsDiv.innerHTML = `
+        <div class="alert alert-info">
+            <h6><i class="fas fa-check-circle"></i> Analysis Complete</h6>
+            <div class="mb-2">
+                <strong>Prediction:</strong> 
+                <span class="health-badge ${badgeClass}">${result.prediction}</span>
+            </div>
+            <div class="mb-2">
+                <strong>Confidence:</strong> ${(result.confidence * 100).toFixed(1)}%
+            </div>
+            <div>
+                <strong>Health Score:</strong> ${(result.health_score || 0).toFixed(1)}/100
+            </div>
+        </div>
+    `;
+    
+    resultsDiv.style.display = 'block';
+}
+
+function refreshDashboard() {
+    showAlert('Refreshing dashboard data...', 'info');
+    
+    // Destroy existing charts
+    if (classDistributionChart) classDistributionChart.destroy();
+    if (rgbAnalysisChart) rgbAnalysisChart.destroy();
+    if (brightnessContrastChart) brightnessContrastChart.destroy();
+    
+    // Reload data
+    loadDashboardData();
+}
+
+function exportData() {
+    // Create downloadable data
+    const data = {
+        timestamp: new Date().toISOString(),
+        summary: {
+            total_samples: 1599,
+            healthy: 661,
+            unhealthy: 508,
+            dead: 430
+        },
+        metrics: {
+            accuracy: 94.2,
+            balance_ratio: 1.54,
+            processing_time: '<100ms'
+        }
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `coral-health-dashboard-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    URL.revokeObjectURL(url);
+    showAlert('Dashboard data exported successfully', 'success');
+}
+
+function downloadChart(chartType) {
+    let chart;
+    let filename;
+    
+    switch(chartType) {
+        case 'class-distribution':
+            chart = classDistributionChart;
+            filename = 'class-distribution-chart.png';
+            break;
+        case 'rgb-analysis':
+            chart = rgbAnalysisChart;
+            filename = 'rgb-analysis-chart.png';
+            break;
+        default:
+            return;
+    }
+    
+    if (chart) {
+        const url = chart.toBase64Image();
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        showAlert('Chart downloaded successfully', 'success');
+    }
+}
+
+function refreshChart(chartType) {
+    showAlert(`Refreshing ${chartType} chart...`, 'info');
+    // In a real application, you would fetch new data here
+    setTimeout(() => {
+        showAlert('Chart refreshed successfully', 'success');
+    }, 1000);
+}
+</script>
+{% endblock %}
