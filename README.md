@@ -71,9 +71,9 @@ coral-reef-guardian/
 ## 📦 Installation
 
 ### Prerequisites
-- Python 3.8+
-- Node.js 14+ (for frontend build tools)
-- Docker (optional, for containerized deployment)
+- Python 
+- Node.js 
+- Docker 
 
 ### Quick Start
 ```bash
@@ -212,23 +212,10 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - **Dataset**: esahit/coral-health-classification from Hugging Face
 - **Research**: Based on coral bleaching research and marine biology studies
-- **Community**: Thanks to the marine conservation and AI communities
-
-## 📞 Support
-
-- **Documentation**: [Full Documentation](docs/)
-- **Issues**: [GitHub Issues](https://github.com/your-username/coral-reef-guardian/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-username/coral-reef-guardian/discussions)
-- **Email**: support@coral-reef-guardian.com
-
 ## 🌍 Impact
 
 This project contributes to marine conservation efforts by:
@@ -236,7 +223,3 @@ This project contributes to marine conservation efforts by:
 - **Monitoring**: Continuous health assessment of reef systems
 - **Research**: Supporting marine biologists with automated analysis tools
 - **Education**: Raising awareness about coral reef conservation
-
----
-
-**🌊 Join us in protecting our coral reefs with AI! 🤖🪸**
