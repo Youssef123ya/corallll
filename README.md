@@ -9,6 +9,8 @@ The Coral Reef Health Guardian is a comprehensive monitoring system that uses de
 - **Unhealthy**: Bleached or stressed coral showing signs of distress
 - **Dead**: Non-living coral tissue with dark, lifeless appearance
 
+🚀 Live Application
+Access URL: https://8000-iqxmudttek3oo4ph0msac-6532622b.e2b.dev
 ## 🚀 Features
 
 ### 🤖 Machine Learning
